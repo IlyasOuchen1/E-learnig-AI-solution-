@@ -186,7 +186,7 @@ class SimpleEducationalOrchestrator:
 
     
     async def generate_scripts(self, state: SimpleWorkflowState) -> SimpleWorkflowState:
-        """Génère les scripts avec le format JSON exact"""
+        """Génère les scripts"""
         try:
             state.execution_log.append("📝 Génération des scripts...")
             state.current_step = 4
@@ -221,10 +221,10 @@ class SimpleEducationalOrchestrator:
                         "commentaire": activity.get('commentaire', "")
                     }
                     
-                    # Créer l'entrée avec le format JSON exact
                     scripts[script_id] = {
                         'activite': formatted_activity,
-                        'script': script_content
+                        'script': script_content,
+                        'generated_at': datetime.now().isoformat()
                     }
                     
                 except Exception as script_error:
@@ -233,13 +233,13 @@ class SimpleEducationalOrchestrator:
             
             state.scripts_data = scripts
             
-            # Sauvegarder localement avec le format exact
+            # Sauvegarder localement
             await self.save_json_output(
                 scripts,
                 f"scripts_{state.session_id[:8]}.json"
             )
             
-            state.execution_log.append(f"✅ {len(scripts)} scripts générés avec format JSON exact")
+            state.execution_log.append(f"✅ {len(scripts)} scripts générés")
             
         except Exception as e:
             state.status = WorkflowStatus.FAILED
@@ -276,15 +276,6 @@ class SimpleEducationalOrchestrator:
                 }
             }
             
-            # Sauvegarder le format JSON exact des scripts (sans métadonnées supplémentaires)
-            if state.scripts_data:
-                await self.save_json_output(
-                    state.scripts_data,
-                    f"scripts_final_{state.session_id[:8]}.json"
-                )
-                state.execution_log.append("💾 Scripts sauvegardés au format JSON exact")
-            
-            # Sauvegarder les résultats complets séparément
             await self.save_json_output(
                 final_results,
                 f"final_results_{state.session_id[:8]}.json"

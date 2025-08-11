@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 import os
 
 try:
-    from .models import Base, WorkflowSession, AgentAnalysis, SequencerData, ScriptData, WorkflowStats
+from .models import Base, WorkflowSession, AgentAnalysis, SequencerData, ScriptData, WorkflowStats
 except ImportError:
     from database.models import Base, WorkflowSession, AgentAnalysis, SequencerData, ScriptData, WorkflowStats
 
